@@ -41,8 +41,16 @@ function App() {
           onChange={(e) => setUsername(e.target.value)}
         />
         <input type="button" value="Загрузить" onClick={fetchTlData} />
-        <pre>
-          <img src={tlData.SKIN?.url} alt="Скин не найден" />
+        <pre style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src={tlData.SKIN?.url}
+            alt="Скин не найден"
+            style={{
+              width: "100%",
+              maxWidth: "768px",
+              imageRendering: "pixelated",
+            }}
+          />
         </pre>
       </article>
     </main>
