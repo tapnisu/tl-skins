@@ -25,34 +25,56 @@ export interface Cape {
 function App() {
   const [username, setUsername] = useState("");
   const [tlData, setTlData] = useState<TlData>({});
+  const [currentUsername, setCurrentUsername] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function fetchTlData() {
+    setLoading(true);
+
+    setCurrentUsername(username);
+
     fetch(`https://tl-skins-api.deno.dev/tlSkin/${username}`)
       .then((result) => result.json())
-      .then((result) => setTlData(result));
+      .then((result) => {
+        setTlData(result);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }
 
   return (
     <main className="container">
       <article>
-        <input
-          name="username"
-          type="text"
-          placeholder="Введите username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input type="button" value="Загрузить" onClick={fetchTlData} />
-        <pre style={{ display: "flex", justifyContent: "center" }}>
-          <img
-            src={tlData.SKIN?.url}
-            alt="Скин не найден"
-            style={{
-              width: "100%",
-              maxWidth: "768px",
-              imageRendering: "pixelated",
-            }}
+        <form style={{ display: "flex", flexDirection: "column" }}>
+          <input
+            name="username"
+            type="text"
+            placeholder="Введите имя пользователя"
+            onChange={(e) => setUsername(e.target.value)}
           />
-        </pre>
+          <button
+            type="button"
+            value="Загрузить"
+            onClick={fetchTlData}
+            aria-label="Загрузка..."
+            aria-busy={loading}
+          >
+            Загрузить
+          </button>
+        </form>
+        {tlData.SKIN ? (
+          <pre style={{ display: "flex", justifyContent: "center" }}>
+            <img
+              src={tlData.SKIN?.url}
+              alt={`${currentUsername}'s skin`}
+              style={{
+                width: "100%",
+                maxWidth: "768px",
+                imageRendering: "pixelated",
+              }}
+            />
+          </pre>
+        ) : null}
       </article>
     </main>
   );
