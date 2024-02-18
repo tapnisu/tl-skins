@@ -36,6 +36,7 @@ function App() {
     <main className="container">
       <article>
         <input
+          name="username"
           type="text"
           placeholder="Введите username"
           onChange={(e) => setUsername(e.target.value)}
