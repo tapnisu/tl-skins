@@ -27,7 +27,7 @@ function App() {
   const [tlData, setTlData] = useState<TlData>({});
 
   function fetchTlData() {
-    fetch(`http://localhost:8000/tlSkin/${username}`)
+    fetch(`https://tl-skins-api.deno.dev/tlSkin/${username}`)
       .then((result) => result.json())
       .then((result) => setTlData(result));
   }
