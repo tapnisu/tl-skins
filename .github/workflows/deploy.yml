@@ -23,12 +23,15 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v3
         with:
-          node-version: lts/*
+          version: 8
 
-      - run: npm install -g pnpm
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
