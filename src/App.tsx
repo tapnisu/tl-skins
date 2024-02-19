@@ -1,5 +1,6 @@
-import "@picocss/pico/css/pico.violet.min.css";
-import { useState } from "react";
+import "@picocss/pico/css/pico.min.css";
+import { FormEventHandler, useState } from "react";
+import { BrowserRouter, useSearchParams } from "react-router-dom";
 
 export interface TlData {
   SKIN?: Skin;
@@ -22,16 +23,21 @@ export interface Cape {
   fps?: number;
 }
 
-function App() {
-  const [username, setUsername] = useState("");
+export function TlSkinLoader() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [username, setUsername] = useState(searchParams.get("username") ?? "");
   const [tlData, setTlData] = useState<TlData>({});
   const [currentUsername, setCurrentUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function fetchTlData() {
+  const fetchTlData: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
     setLoading(true);
 
     setCurrentUsername(username);
+    setSearchParams({ username });
 
     fetch(`https://tl-skins-api.deno.dev/tlSkin/${username}`)
       .then((result) => result.json())
@@ -40,22 +46,26 @@ function App() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }
+  };
 
   return (
     <main className="container">
       <article>
-        <form style={{ display: "flex", flexDirection: "column" }}>
+        <form
+          style={{ display: "flex", flexDirection: "column" }}
+          onSubmit={fetchTlData}
+        >
           <input
             name="username"
+            defaultValue={username}
             type="text"
             placeholder="Введите имя пользователя"
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
           <button
-            type="button"
+            type="submit"
             value="Загрузить"
-            onClick={fetchTlData}
             aria-label="Загрузка..."
             aria-busy={loading}
           >
@@ -80,4 +90,10 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <TlSkinLoader />
+    </BrowserRouter>
+  );
+}
