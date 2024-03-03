@@ -72,8 +72,14 @@ export function TlSkinLoader() {
             Загрузить
           </button>
         </form>
-        {tlData.SKIN ? (
-          <pre style={{ display: "flex", justifyContent: "center" }}>
+        <pre
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {tlData.SKIN ? (
             <img
               src={tlData.SKIN?.url}
               alt={`${currentUsername}'s skin`}
@@ -83,8 +89,20 @@ export function TlSkinLoader() {
                 imageRendering: "pixelated",
               }}
             />
-          </pre>
-        ) : null}
+          ) : null}
+
+          {tlData.CAPE ? (
+            <img
+              src={tlData.CAPE?.url}
+              alt={`${currentUsername}'s cape`}
+              style={{
+                width: "100%",
+                maxWidth: "768px",
+                imageRendering: "pixelated",
+              }}
+            />
+          ) : null}
+        </pre>
       </article>
     </main>
   );
